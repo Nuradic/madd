@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:madd/bindings.dart';
 import 'package:madd/view/calender.dart';
+import 'package:madd/view/currency.dart';
 import 'package:madd/view/home.dart';
+import 'package:madd/view/map.dart';
 import 'package:madd/view/themes.dart';
 
 void main() {
@@ -21,13 +23,23 @@ class TourBase extends StatelessWidget {
       getPages: [
         GetPage(
           name: "/home",
-          page: () => const Home(),
-          bindings: [DrawerBindings()],
+          page: () => HomeMain(),
+          bindings: [DrawerBindings(), CalanderBindings()],
         ),
         GetPage(
           name: "/calender",
-          page: () => const Calander(),
-          bindings: [CalanderBindings()],
+          page: () => Calander(),
+          bindings: [CalanderBindings(), DrawerBindings()],
+        ),
+        GetPage(
+          name: "/currency",
+          page: () => const CurrencyHome(),
+          bindings: [DrawerBindings()],
+        ),
+        GetPage(
+          name: "/map",
+          page: () => const MapHome(),
+          bindings: [DrawerBindings()],
         ),
       ],
       initialRoute: '/home',

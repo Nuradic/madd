@@ -20,3 +20,11 @@ class CalanderBindings extends Bindings {
     );
   }
 }
+
+class CurrencyBindings extends Bindings {
+  @override
+  void dependencies() {
+    // TODO: implement dependencies
+  }
+  // ETC Ethiopian = ETC();
+}
