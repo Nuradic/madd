@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
-import 'package:madd/controllers/calander_controller.dart';
+import 'package:madd/controllers/calender_controller.dart';
+import 'package:madd/controllers/map_home_controller.dart';
 
 import 'controllers/navigation_controller.dart';
 
@@ -16,7 +17,7 @@ class CalanderBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(
-      () => CalanderController(),
+      () => CalenderController(),
     );
   }
 }
@@ -27,4 +28,11 @@ class CurrencyBindings extends Bindings {
     // TODO: implement dependencies
   }
   // ETC Ethiopian = ETC();
+}
+
+class MapBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => MapHomeController());
+  }
 }

@@ -13,10 +13,23 @@ import 'package:madd/view/map.dart';
 
 class HomeMain extends StatelessWidget {
   HomeMain({super.key});
+  // final pageitem = const [
+  //   BottomNavigationBarItem(icon: Icon(FontAwesomeIcons.home), label: "Hello"),
+  //   BottomNavigationBarItem(
+  //       icon: Icon(FontAwesomeIcons.ccAmazonPay), label: "Cool"),
+  //   BottomNavigationBarItem(
+  //       icon: Icon(FontAwesomeIcons.ccAmazonPay), label: "loop"),
+  //   BottomNavigationBarItem(
+  //       icon: Icon(FontAwesomeIcons.ccAmazonPay), label: "pool"),
+  // const Home(),
+  // Calander(),
+  // const MapHome(),
+  // const CurrencyHome()
+  // ];
   final pages = <Widget>[
-    const Calander(),
     const Home(),
-    const MapHome(),
+    Calander(),
+    MapHome(),
     const CurrencyHome()
   ];
 
@@ -42,23 +55,39 @@ class Home extends StatelessWidget {
             decelerationRate: ScrollDecelerationRate.normal),
         slivers: [
           const SliverAppBar(),
-          sliverAdapter(
-            widget: SizedBox(
-              height: 400,
-              child: ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: 10,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => getItem(0),
+          SliverStickyHeader.builder(
+            builder: (context, state) => Card(
+              elevation: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16, left: 10),
+                child: Text(
+                  "Top Attraction For You",
+                  style: GoogleFonts.poppins(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            sliver: sliverAdapter(
+              widget: SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => getItem(0),
+                ),
               ),
             ),
           ),
           SliverStickyHeader.builder(
               builder: ((context, state) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 16, left: 10),
-                  child: ListTile(
-                    title: Text(
+                return Card(
+                  elevation: 0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16, left: 10),
+                    child: Text(
                       "Nearby Visitables",
                       style: GoogleFonts.poppins(
                         fontSize: 18,
@@ -137,47 +166,79 @@ class Home extends StatelessWidget {
   }
 
   Widget getItem(int index) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: Colors.blue,
-            // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+    var col = Color(0xff6750A4);
+    return Container(
+      margin: const EdgeInsets.all(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              // color: Colors.blue,
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(15), topRight: Radius.circular(15)),
+              child: Image(
+                  width: 200,
+                  height: 150,
+                  fit: BoxFit.fitWidth,
+                  image: AssetImage("assets/images/img${index + 1}.jpeg")),
+            ),
           ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(15), topRight: Radius.circular(15)),
-            child: Image(
-                width: 200,
-                height: 150,
-                fit: BoxFit.fitWidth,
-                image: AssetImage("assets/images/img${index + 1}.jpeg")),
+          Container(
+            width: 200,
+            height: 100,
+            padding: const EdgeInsets.only(left: 10, bottom: 10, top: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade300,
+              borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(15),
+                  bottomRight: Radius.circular(15)),
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Icon(
+                        FontAwesomeIcons.mapMarkerAlt,
+                        color: col,
+                      ),
+                    ),
+                    Expanded(
+                        flex: 4,
+                        child: Text(
+                          "Gondar",
+                          style: TextStyle(color: col, fontSize: 16),
+                        )),
+                    const Expanded(flex: 4, child: Text("Fasiladas")),
+                  ],
+                ),
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                const Row(
+                  children: [
+                    Expanded(flex: 5, child: SizedBox()),
+                    Expanded(
+                        flex: 2,
+                        child: Text(
+                          "4.5",
+                          style: TextStyle(
+                            color: Color(0xff25005c),
+                          ),
+                        )),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 20.0),
-          child: Row(
-            children: [
-              Icon(FontAwesomeIcons.mapMarkerAlt),
-              Text("Hello"),
-              Text("Hello"),
-            ],
-          ),
-        ),
-        const Padding(
-          padding: EdgeInsets.only(left: 20.0, top: 10),
-          child: Row(
-            children: [
-              SizedBox(),
-              Text("Hello"),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

@@ -4,7 +4,7 @@ import 'package:abushakir/abushakir.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class CalanderController extends GetxController {
+class CalenderController extends GetxController {
   int month = ETC.today().month;
   int year = ETC.today().year;
   final listController = ScrollController();

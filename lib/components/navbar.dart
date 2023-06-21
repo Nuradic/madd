@@ -12,8 +12,8 @@ class NavBar extends StatelessWidget {
     FontAwesomeIcons.mapMarkerAlt,
     FontAwesomeIcons.dollarSign
   ];
-  final selectedColor = const Color(0xff6750A4);
-  final pages = const ["/home", "/calender", "/currency", "/map"];
+  final selectedColor = const Color(0xff25005c);
+  // final pages = const ["/home", "/calender", "/currency", "/map"];
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -39,7 +39,6 @@ class NavBar extends StatelessWidget {
           itemBuilder: (context, index) => InkWell(
             onTap: () {
               navController.setSelected(index);
-              // Get.toNamed(pages[index]);
             },
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,

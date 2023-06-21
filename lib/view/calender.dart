@@ -3,10 +3,11 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:madd/controllers/calander_controller.dart';
+import 'package:madd/controllers/calender_controller.dart';
 
 class Calander extends StatelessWidget {
-  const Calander({super.key});
+  Calander({super.key});
+  final calController = Get.find<CalenderController>();
 
   static const weekDays = [
     "M",
@@ -46,7 +47,7 @@ class Calander extends StatelessWidget {
   }
 
   Widget monthCalender(BuildContext context) {
-    return GetBuilder<CalanderController>(builder: (controller) {
+    return GetBuilder<CalenderController>(builder: (controller) {
       return SizedBox(
         height: 200,
         width: MediaQuery.of(context).size.width,
@@ -96,7 +97,7 @@ class Calander extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<CalanderController>(builder: (controller) {
+    return GetBuilder<CalenderController>(builder: (controller) {
       return CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: <Widget>[
@@ -116,6 +117,7 @@ class Calander extends StatelessWidget {
                       duration: const Duration(seconds: 1500),
                       curve: Curves.easeInOut,
                     );
+                    controller.getMonthly();
                     // showDatePicker(
                     //     context: context,
                     //     initialDate: DateTime.now(),
@@ -137,11 +139,18 @@ class Calander extends StatelessWidget {
             ],
             pinned: true,
             bottom: PreferredSize(
-              preferredSize: const Size(200, 80),
+              preferredSize: const Size(200, 50),
               child: Column(
                 children: [
                   buildWeekDay(),
-                  Row(
+                ],
+              ),
+            ),
+          ),
+          SliverStickyHeader.builder(
+            builder: ((context, state) => Card(
+                  elevation: 0,
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
@@ -164,26 +173,30 @@ class Calander extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-          ),
-          sliverAdapter(
-            widget: SizedBox(
-              height: 400,
-              child: ListView.builder(
-                controller: controller.listController,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => monthCalender(context),
+                )),
+            sliver: sliverAdapter(
+              widget: SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  physics: const PageScrollPhysics(),
+                  controller: controller.listController,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) => monthCalender(context),
+                ),
               ),
             ),
           ),
           SliverStickyHeader.builder(
-            builder: (context, state) => Text(
-              "This Month's Event",
-              style: GoogleFonts.poppins(
-                fontSize: 24,
-                fontWeight: FontWeight.w600,
+            builder: (context, state) => Card(
+              elevation: 0,
+              child: ListTile(
+                title: Text(
+                  "This Month's Event",
+                  style: GoogleFonts.poppins(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
             ),
             sliver: SliverList(

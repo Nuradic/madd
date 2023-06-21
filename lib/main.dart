@@ -24,23 +24,23 @@ class TourBase extends StatelessWidget {
         GetPage(
           name: "/home",
           page: () => HomeMain(),
-          bindings: [DrawerBindings(), CalanderBindings()],
+          bindings: [DrawerBindings(), CalanderBindings(), MapBindings()],
         ),
-        GetPage(
-          name: "/calender",
-          page: () => Calander(),
-          bindings: [CalanderBindings(), DrawerBindings()],
-        ),
-        GetPage(
-          name: "/currency",
-          page: () => const CurrencyHome(),
-          bindings: [DrawerBindings()],
-        ),
-        GetPage(
-          name: "/map",
-          page: () => const MapHome(),
-          bindings: [DrawerBindings()],
-        ),
+        // GetPage(
+        //   name: "/calender",
+        //   page: () => const Calander(),
+        //   bindings: [CalanderBindings(), DrawerBindings()],
+        // ),
+        // GetPage(
+        //   name: "/currency",
+        //   page: () => const CurrencyHome(),
+        //   bindings: [DrawerBindings()],
+        // ),
+        // GetPage(
+        //   name: "/map",
+        //   page: () => const MapHome(),
+        //   bindings: [DrawerBindings()],
+        // ),
       ],
       initialRoute: '/home',
       themeMode: ThemeMode.light,

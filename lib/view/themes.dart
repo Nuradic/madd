@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 get lightTheme {
   // Color primary = const Color(0xFF9747FF);
   ThemeData lightTheme = ThemeData(
+    // bottomNavigationBarTheme:
+    //     const BottomNavigationBarThemeData(backgroundColor: Colors.red),
     primaryColor: const Color(0xFF6750A4),
     appBarTheme: const AppBarTheme(
         // backgroundColor: Color(0xFFE8DEF8),
