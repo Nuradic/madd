@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:madd/bindings.dart';
-import 'package:madd/view/calender.dart';
-import 'package:madd/view/currency.dart';
 import 'package:madd/view/home.dart';
-import 'package:madd/view/map.dart';
 import 'package:madd/view/themes.dart';
 
 void main() {

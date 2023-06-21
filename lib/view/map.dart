@@ -40,32 +40,22 @@ class MapSampleState extends State<MapSample> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: const Text('To My Location'),
-        icon: const Icon(Icons.directions_boat),
-      ),
-      // bottomSheet: const GetMapBottomSheet()
-    );
+        body: GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: _kGooglePlex,
+          onMapCreated: (GoogleMapController controller) {
+            _controller.complete(controller);
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: _goToTheLake,
+          label: const Text('To My Location'),
+          icon: const Icon(Icons.directions_boat),
+        ),
+        bottomSheet: const GetMapBottomSheet());
   }
 
   Future<void> _goToTheLake() async {
-    // Get.close();
-    // Get.bottomSheet(
-    //   SafeArea(
-    //     child: Container(
-    //       color: Colors.amber,
-    //       height: 400,
-    //     ),
-    //   ),
-    // );
     final GoogleMapController controller = await _controller.future;
     await controller.animateCamera(
         CameraUpdate.newCameraPosition(await widget.mapController.goto()));
@@ -82,15 +72,20 @@ class GetMapBottomSheet extends StatefulWidget {
 class _GetMapBottomSheetState extends State<GetMapBottomSheet>
     with SingleTickerProviderStateMixin {
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BottomSheet(
       onClosing: () {},
       showDragHandle: true,
       onDragStart: (details) {
-        print("cooling of");
+        // print("cooling of");
       },
       animationController: BottomSheet.createAnimationController(this),
-      onDragEnd: (details, {required isClosing}) => print("Cool of"),
+      onDragEnd: (details, {required isClosing}) => const Text("cool"),
       builder: (context) => SafeArea(
         child: Container(
           height: 400,
