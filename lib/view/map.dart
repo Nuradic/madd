@@ -15,7 +15,9 @@ class MapHome extends StatelessWidget {
 }
 
 class MapSample extends StatefulWidget {
-  MapSample({super.key});
+  MapSample({
+    super.key,
+  });
   final mapController = Get.find<MapHomeController>();
 
   @override
@@ -36,24 +38,30 @@ class MapSampleState extends State<MapSample> {
       target: LatLng(37.43296265331129, -122.08832357078792),
       tilt: 59.440717697143555,
       zoom: 19.151926040649414);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GoogleMap(
-          mapType: MapType.normal,
-          initialCameraPosition: _kGooglePlex,
-          onMapCreated: (GoogleMapController controller) {
-            _controller.complete(controller);
-          },
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _goToTheLake,
-          label: const Text('To My Location'),
-          icon: const Icon(Icons.directions_boat),
-        ),
-        bottomSheet: const GetMapBottomSheet());
+      body: GoogleMap(
+        // markers: widget.mapController.getMarker(),
+        mapType: MapType.normal,
+        initialCameraPosition: _kGooglePlex,
+        onMapCreated: (GoogleMapController controller) {
+          _controller.complete(controller);
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _goToTheLake,
+        label: const Text('To My Location'),
+        icon: const Icon(Icons.directions_boat),
+      ),
+      // bottomSheet: const GetMapBottomSheet(),
+    );
   }
+
+  // Marker mk = const Marker(
+  //     markerId: MarkerId("1"),
+  //     position: LatLng(0, 0),
+  //     icon: BitmapDescriptor.defaultMarker);
 
   Future<void> _goToTheLake() async {
     final GoogleMapController controller = await _controller.future;
@@ -73,6 +81,7 @@ class _GetMapBottomSheetState extends State<GetMapBottomSheet>
     with SingleTickerProviderStateMixin {
   @override
   void dispose() {
+    //
     super.dispose();
   }
 

@@ -9,6 +9,7 @@ import 'package:madd/components/sidebar.dart';
 import 'package:madd/controllers/navigation_controller.dart';
 import 'package:madd/view/calender.dart';
 import 'package:madd/view/currency.dart';
+import 'package:madd/view/detail_tour.dart';
 import 'package:madd/view/map.dart';
 
 class HomeMain extends StatelessWidget {
@@ -82,23 +83,23 @@ class Home extends StatelessWidget {
             ),
           ),
           SliverStickyHeader.builder(
-              builder: ((context, state) {
-                return Card(
-                  elevation: 0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16, left: 10),
-                    child: Text(
-                      "Nearby Visitables",
-                      style: GoogleFonts.poppins(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+            builder: ((context, state) {
+              return Card(
+                elevation: 0,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16, left: 10),
+                  child: Text(
+                    "Nearby Visitables",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                );
-              }),
-              sliver: sliverAdapter(
-                  widget: MasonryGridView.builder(
+                ),
+              );
+            }),
+            sliver: sliverAdapter(
+              widget: MasonryGridView.builder(
                 padding: const EdgeInsets.all(5),
                 physics: const BouncingScrollPhysics(),
                 shrinkWrap: true,
@@ -110,63 +111,42 @@ class Home extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: getImageLay(index),
                 ),
-              )
-                  // sliver: SliverGrid.builder(
-                  //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  //       childAspectRatio: 0.6, crossAxisCount: 2),
-                  //   itemBuilder: (context, index) {
-                  //     return getItem();
-                  //   },
-
-                  //   // delegate: SliverChildBuilderDelegate(
-                  //   //     childCount: 10, (context, index) => getItem())),
-                  // ),
-                  // sliverAdapter(
-                  //   widget: StickyHeader(
-                  //     header: Padding(
-                  //       padding: const EdgeInsets.all(10),
-                  //       child: Text(
-                  //         "Top Tourist Attraction For You",
-                  //         style: GoogleFonts.poppins(
-                  //           fontSize: 18,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     content: SizedBox(
-                  //       height: 300,
-                  //       child: ListView.builder(
-                  //         scrollDirection: Axis.horizontal,
-                  //         shrinkWrap: true,
-                  //         itemCount: 100,
-                  //         itemBuilder: (context, index) => getItem(),
-                  //       ),
-                  //     ),
-                  //   ),
-                  // )
-                  ))
+              ),
+            ),
+          )
         ]);
   }
 
   Widget getImageLay(int index) {
-    return Stack(alignment: Alignment.center, children: [
-      ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image(image: AssetImage("assets/images/img${index + 1}.jpeg")),
-      ),
-      const AnimatedOpacity(
-        opacity: 0.5,
-        duration: Duration(milliseconds: 300),
-        child: Text(
-          "Something",
-          textAlign: TextAlign.center,
+    return GestureDetector(
+      onTap: () => {
+        Get.to(
+          DetailHome(
+            index: index,
+          ),
         ),
-      )
-    ]);
+      },
+      child: Stack(alignment: Alignment.center, children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: Image(
+            image: AssetImage("assets/images/img${index + 1}.jpeg"),
+          ),
+        ),
+        const AnimatedOpacity(
+          opacity: 0.5,
+          duration: Duration(milliseconds: 300),
+          child: Text(
+            "Something",
+            textAlign: TextAlign.center,
+          ),
+        )
+      ]),
+    );
   }
 
   Widget getItem(int index) {
-    var col = Color(0xff6750A4);
+    var col = const Color(0xff6750A4);
     return Container(
       margin: const EdgeInsets.all(10),
       child: Column(
