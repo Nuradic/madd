@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:madd/controllers/calender_controller.dart';
+import 'package:madd/controllers/home_controller.dart';
 import 'package:madd/controllers/map_home_controller.dart';
 
 import 'controllers/navigation_controller.dart';
@@ -34,5 +35,12 @@ class MapBindings extends Bindings {
   @override
   void dependencies() {
     Get.lazyPut(() => MapHomeController());
+  }
+}
+
+class HomeBindings extends Bindings {
+  @override
+  void dependencies() {
+    Get.lazyPut(() => HomeController());
   }
 }

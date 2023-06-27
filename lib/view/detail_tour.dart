@@ -2,42 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:madd/view/map.dart';
+import 'package:madd/models/models.dart';
 
 class DetailHome extends StatelessWidget {
-  final int index;
-  DetailHome({super.key, required this.index});
+  final Spot spot;
+  DetailHome({super.key, required this.spot});
   final _editController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _editController.text =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris egestas, est vel sollicitudin iaculis, felis nulla convallis ligula, eu mattis quam tellus et magna. Praesent imperdiet ullamcorper augue, a posuere tellus pellentesque non. Vestibulum feugiat consectetur finibus. Sed eget ex eu justo sollicitudin feugiat ut a ligula. Vivamus dui purus, fringilla in sollicitudin nec, tempor ac nisl. Praesent mattis hendrerit ligula, eu tempor nibh faucibus id. Quisque in fermentum odio.";
+    _editController.text = spot.description;
+
     return Scaffold(
       body: CustomScrollView(slivers: [
         SliverAppBar(
           expandedHeight: 400,
           stretch: true,
-          title: Text("Detail $index"),
-          flexibleSpace: FlexibleSpaceBar(background: MapHome()
-              //  Image(
-              //   image: AssetImage("assets/images/img1.jpeg"),
-              //   fit: BoxFit.cover,
-              // ),
-              ),
+          title: Text(spot.name),
+          flexibleSpace: const FlexibleSpaceBar(
+            background: Image(
+              image: AssetImage("assets/images/img1.jpeg"),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-        // sliverAdapter(
-        //   widget: Container(
-        //     margin: const EdgeInsets.all(10),
-        //     height: 200,
-        //     decoration: BoxDecoration(
-        //       color: Colors.red,
-        //       borderRadius: BorderRadius.circular(20),
-        //     ),
-        //   ),
-        // ),
         SliverStickyHeader.builder(
           builder: (contex, state) => Card(
             elevation: 0,

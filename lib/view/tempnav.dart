@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   HomePageState createState() => HomePageState();
 }
@@ -13,7 +15,7 @@ class HomePageState extends State<HomePage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       bottomNavigationBar: Container(
-        margin: EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20),
         height: size.width * .155,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -21,7 +23,7 @@ class HomePageState extends State<HomePage> {
             BoxShadow(
               color: Colors.black.withOpacity(.15),
               blurRadius: 30,
-              offset: Offset(0, 10),
+              offset: const Offset(0, 10),
             ),
           ],
           borderRadius: BorderRadius.circular(50),

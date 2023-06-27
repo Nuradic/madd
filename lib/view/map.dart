@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:madd/controllers/map_home_controller.dart';
 
 class MapHome extends StatelessWidget {
-  MapHome({super.key});
+  const MapHome({super.key});
 
   @override
   Widget build(BuildContext context) {
