@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class APIHandler {
-  static const baseUrl = "http://192.168.0.3:8000/";
+  static const baseUrl = "http://192.168.0.137:8000/";
   static final store = GetStorage();
   static String getCookie() {
     String? cache = store.read("Cookie");
@@ -34,14 +35,20 @@ class APIHandler {
           : null;
       cookie != null ? setCookie(cookie) : "";
       if (response.statusCode == 401) {
-        Get.showSnackbar(const GetSnackBar(
-          title: "Needs Authentication",
-        ));
+        // Get.showSnackbar(const GetSnackBar(
+        //   snackPosition: SnackPosition.TOP,
+        //   dismissDirection: DismissDirection.horizontal,
+        //   title: "Needs Authentication",
+        //   message: "U need to login First",
+        // ));
         return null;
       }
       if (response.statusCode == 400) {
         Get.showSnackbar(const GetSnackBar(
+          dismissDirection: DismissDirection.horizontal,
+          snackPosition: SnackPosition.TOP,
           title: "Bad Request",
+          message: "Invalid request",
         ));
         return null;
       }
@@ -50,6 +57,9 @@ class APIHandler {
       }
       res = response.body;
     } on Exception {
+      if (kDebugMode) {
+        print("Get Error");
+      }
       return null;
     } finally {
       client.close();

@@ -4,6 +4,7 @@ import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:madd/api/api_handler.dart';
 import 'package:madd/components/navbar.dart';
 import 'package:madd/components/sidebar.dart';
 import 'package:madd/controllers/home_controller.dart';
@@ -39,36 +40,40 @@ class HomeMain extends StatelessWidget {
 class Home extends StatelessWidget {
   Home({super.key});
   final c = Get.find<HomeController>();
-  Widget _buildFilterItem(SpotType spotType) => Container(
-        width: 160,
-        padding: const EdgeInsets.all(10),
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(60),
-          boxShadow: [
-            BoxShadow(
-              offset: const Offset(4, 8),
-              blurRadius: 25,
-              spreadRadius: 5,
-              color: Colors.grey.shade300,
-            ),
-            // BoxShadow(blurRadius: 10, spreadRadius: 4, color: Colors.black),
-          ],
-          color: Colors.white,
-        ),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-          const Expanded(flex: 2, child: CircleAvatar()),
-          Expanded(
-            flex: 3,
-            child: Text(
-              spotType.name,
-              style: const TextStyle(
-                fontSize: 12,
+  Widget _buildFilterItem(SpotType spotType) => GestureDetector(
+        onTap: () {
+          Get.toNamed("/login");
+        },
+        child: Container(
+          width: 160,
+          padding: const EdgeInsets.all(10),
+          margin: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(60),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(4, 8),
+                blurRadius: 25,
+                spreadRadius: 5,
+                color: Colors.grey.shade300,
+              ),
+            ],
+            color: Colors.white,
+          ),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            const Expanded(flex: 2, child: CircleAvatar()),
+            Expanded(
+              flex: 3,
+              child: Text(
+                spotType.name,
+                style: const TextStyle(
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          const FaIcon(Icons.cancel)
-        ]),
+            const FaIcon(Icons.cancel)
+          ]),
+        ),
       );
   @override
   Widget build(BuildContext context) {
@@ -94,15 +99,18 @@ class Home extends StatelessWidget {
             sliver: sliverAdapter(
               widget: SizedBox(
                 height: 70,
-                child: GetBuilder<HomeController>(builder: (controller) {
-                  return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: controller.spotType.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) =>
-                        _buildFilterItem(controller.spotType[index]),
-                  );
-                }),
+                child: FutureBuilder(
+                  future: Spot.types,
+                  builder: (context, snapshoot) => snapshoot.hasData
+                      ? ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: snapshoot.data.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) =>
+                              _buildFilterItem(snapshoot.data[index]),
+                        )
+                      : const CircularProgressIndicator(),
+                ),
               ),
             ),
           ),
@@ -163,7 +171,10 @@ class Home extends StatelessWidget {
                           crossAxisCount: 2),
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: SpotImager(spot: controller.topSpot[index]),
+                    child: SpotImager(
+                        spot: controller.topSpot[index],
+                        url:
+                            "${APIHandler.baseUrl}medias/0f8e5805de94514e25792ae4b26195db1688150039.jpg"),
                   ),
                 );
               }),
@@ -201,7 +212,10 @@ class Home extends StatelessWidget {
   Widget getItem(Spot spot) {
     var col = const Color(0xff6750A4);
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Get.toNamed("/login");
+        print("pressed");
+      },
       child: Container(
         margin: const EdgeInsets.all(10),
         child: Column(
@@ -392,8 +406,9 @@ class _TopAttractionItemState extends State<TopAttractionItem> {
 }
 
 class SpotImager extends StatefulWidget {
-  final Spot spot;
-  const SpotImager({super.key, required this.spot});
+  final Spot? spot;
+  final String url;
+  const SpotImager({super.key, this.spot, required this.url});
 
   @override
   State<SpotImager> createState() => _SpotImagerState();
@@ -412,6 +427,10 @@ class _SpotImagerState extends State<SpotImager> {
         )
       },
       onTapUp: (up) => {
+        if (widget.spot != null)
+          {
+            Get.to(() => DetailHome(spot: widget.spot!)),
+          },
         setState(
           () {
             opacity = 0;
@@ -421,8 +440,8 @@ class _SpotImagerState extends State<SpotImager> {
       child: Stack(alignment: Alignment.center, children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
-          child: const Image(
-            image: AssetImage("assets/images/img${1 + 1}.jpeg"),
+          child: Image(
+            image: NetworkImage(widget.url),
           ),
         ),
         AnimatedOpacity(

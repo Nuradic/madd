@@ -7,11 +7,13 @@ import 'package:get/get.dart';
 class CalenderController extends GetxController {
   int month = ETC.today().month;
   int year = ETC.today().year;
+  final calScrollController = ScrollController(initialScrollOffset: 650);
   final listController = ScrollController();
   late List<List> cal;
-  late Timer timer = Timer(const Duration(seconds: 1), () {
-    getMonthly();
-  });
+  late int currentDay = ETC.today().day;
+  late int currentMonth = ETC.today().month;
+  late int currentYear = ETC.today().year;
+  late Timer timer = Timer(const Duration(seconds: 1), () {});
 
   getMonthly() {
     ETC etc = ETC(year: year, month: month);
@@ -23,8 +25,8 @@ class CalenderController extends GetxController {
     List<List<Object>> mm =
         List.generate(days.length, (index) => [days[index][2], true]);
     var ll = List.generate(onset, (index) => [index + 1, false]);
-    update();
     cal = ff + mm + ll;
+    update();
     return ff + mm + ll;
   }
 
@@ -52,8 +54,16 @@ class CalenderController extends GetxController {
 
   @override
   void onInit() {
-    cal = getMonthly();
     super.onInit();
+    getMonthly();
+  }
+
+  @override
+  void onReady() {
+    // calScrollController.animateTo(650,
+    //     duration: const Duration(microseconds: 100),
+    //     curve: Curves.bounceInOut); // TODO: implement onReady
+    super.onReady();
   }
 
   @override

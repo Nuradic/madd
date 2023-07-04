@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:madd/api/SpotApi.dart';
-import 'package:madd/api/api_handler.dart';
 import 'package:madd/models/models.dart';
 
 class HomeController extends GetxController {

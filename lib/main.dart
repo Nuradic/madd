@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:madd/bindings.dart';
+import 'package:madd/view/Login/login_screen.dart';
+import 'package:madd/view/Signup/signup_screen.dart';
+import 'package:madd/view/Welcome/welcome_screen.dart';
 import 'package:madd/view/home.dart';
 import 'package:madd/view/themes.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -32,24 +35,25 @@ class TourBase extends StatelessWidget {
             DrawerBindings(),
             CalanderBindings(),
             MapBindings(),
-            HomeBindings()
+            HomeBindings(),
+            CurrencyBind()
           ],
         ),
-        // GetPage(
-        //   name: "/calender",
-        //   page: () => const Calander(),
-        //   bindings: [CalanderBindings(), DrawerBindings()],
-        // ),
-        // GetPage(
-        //   name: "/currency",
-        //   page: () => const CurrencyHome(),
-        //   bindings: [DrawerBindings()],
-        // ),
-        // GetPage(
-        //   name: "/map",
-        //   page: () => const MapHome(),
-        //   bindings: [DrawerBindings()],
-        // ),
+        GetPage(
+          name: "/login",
+          page: () => const LoginScreen(),
+          bindings: [CalanderBindings(), DrawerBindings()],
+        ),
+        GetPage(
+          name: "/signup",
+          page: () => const SignUpScreen(),
+          bindings: [DrawerBindings()],
+        ),
+        GetPage(
+          name: "/welcome",
+          page: () => const WelcomeScreen(),
+          bindings: [DrawerBindings()],
+        ),
       ],
       initialRoute: '/home',
       themeMode: ThemeMode.light,

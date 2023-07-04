@@ -28,10 +28,20 @@ class SpotApi {
 
   static Future<List<SpotType>> getTypes() async {
     String? str = await APIHandler.get("spot-type");
-    if (str == null) {
-      return [];
-    }
+    str ??= "[]";
 
     return spotTypeFromJson(str);
+  }
+
+  static Future<List<ImageApi>> getImages(Spot spot) async {
+    String? str = await APIHandler.get("/images/?spot=${spot.id}");
+    if (str == null) return [];
+    return imageApiFromJson(str);
+  }
+
+  static Future<List<Comment>> getComments(Spot spot) async {
+    String? str = await APIHandler.get("/comments/?spot=${spot.id}");
+    str ??= "[]";
+    return commentFromJson(str);
   }
 }

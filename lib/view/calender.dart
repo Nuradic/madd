@@ -49,7 +49,7 @@ class Calander extends StatelessWidget {
   Widget monthCalender(BuildContext context) {
     return GetBuilder<CalenderController>(builder: (controller) {
       return SizedBox(
-        height: 200,
+        height: 300,
         width: MediaQuery.of(context).size.width,
         child: GridView.builder(
           physics: const BouncingScrollPhysics(),
@@ -59,7 +59,7 @@ class Calander extends StatelessWidget {
               crossAxisCount: 7),
           itemCount: 35,
           itemBuilder: (context, index) => Card(
-            color: controller.cal[index][1]
+            color: !controller.cal[index][1]
                 ? Colors.grey
                 : (index % 7) % 2 == 0
                     ? Colors.blue.shade100
@@ -112,12 +112,12 @@ class Calander extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    controller.listController.animateTo(
-                      13,
-                      duration: const Duration(seconds: 1500),
-                      curve: Curves.easeInOut,
-                    );
-                    controller.getMonthly();
+                    // controller.listController.animateTo(
+                    //   13,
+                    //   duration: const Duration(seconds: 1500),
+                    //   curve: Curves.easeInOut,
+                    // );
+                    // controller.getMonthly();
                     // showDatePicker(
                     //     context: context,
                     //     initialDate: DateTime.now(),
@@ -148,81 +148,95 @@ class Calander extends StatelessWidget {
             ),
           ),
           SliverStickyHeader.builder(
-            builder: ((context, state) => Card(
-                  elevation: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: Text(
-                          "Apr 2023",
-                          style: GoogleFonts.roboto(
-                              fontSize: 20, fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Text(
-                          "Mar 2023",
-                          style: GoogleFonts.roboto(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )),
-            sliver: sliverAdapter(
-              widget: SizedBox(
-                height: 300,
-                child: ListView.builder(
-                  physics: const PageScrollPhysics(),
-                  controller: controller.listController,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => monthCalender(context),
-                ),
-              ),
-            ),
-          ),
-          SliverStickyHeader.builder(
-            builder: (context, state) => Card(
-              elevation: 0,
-              child: ListTile(
-                title: Text(
-                  "This Month's Event",
-                  style: GoogleFonts.poppins(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                  childCount: 10,
-                  (context, index) => ListTile(
-                        onTap: () {},
-                        leading: Column(
-                          children: [
-                            Text(
-                              "${index + 1}".padLeft(2, "0"),
-                              style: GoogleFonts.poppins(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
+              builder: ((context, state) => Card(
+                    elevation: 0,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                            padding: const EdgeInsets.only(left: 20),
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_back_ios),
+                              onPressed: () {
+                                controller.getPrev();
+                              },
+                            )
+                            // Text(
+                            //   "Apr 2023",
+                            //   style: GoogleFonts.roboto(
+                            //       fontSize: 20, fontWeight: FontWeight.w500),
+                            // ),
                             ),
-                            Text(
-                              "${index + 1}".padLeft(2, "0"),
-                              style: GoogleFonts.poppins(
-                                  fontSize: 12,
-                                  color: Theme.of(context).primaryColor),
+                        Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: IconButton(
+                              icon: const Icon(Icons.arrow_forward_ios),
+                              onPressed: () {
+                                controller.getNext();
+                              },
+                            )
+                            //  Text(
+                            //   "Mar 2023",
+                            //   style: GoogleFonts.roboto(
+                            //     fontSize: 20,
+                            //     fontWeight: FontWeight.w500,
+                            //   ),
+                            // ),
                             ),
-                          ],
-                        ),
-                        title: const Text("data"),
-                      )),
-            ),
-          ),
+                      ],
+                    ),
+                  )),
+              sliver: sliverAdapter(widget: monthCalender(context))
+              // sliverAdapter(
+              //   widget: SizedBox(
+              //     height: 300,
+              //     child: ListView.builder(
+              //       physics: const PageScrollPhysics(),
+              //       controller: controller.calScrollController,
+              //       scrollDirection: Axis.horizontal,
+              //       itemBuilder: (context, index) =>
+              //           monthCalender(context, index),
+              //     ),
+              //   ),
+              // ),
+              ),
+          // SliverStickyHeader.builder(
+          //   builder: (context, state) => Card(
+          //     elevation: 0,
+          //     child: ListTile(
+          //       title: Text(
+          //         "Converter",
+          //         style: GoogleFonts.poppins(
+          //           fontSize: 24,
+          //           fontWeight: FontWeight.w600,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          //   sliver: SliverList(
+          //     delegate: SliverChildBuilderDelegate(
+          //         childCount: 10,
+          //         (context, index) => ListTile(
+          //               onTap: () {},
+          //               leading: Column(
+          //                 children: [
+          //                   Text(
+          //                     "${index + 1}".padLeft(2, "0"),
+          //                     style: GoogleFonts.poppins(
+          //                         fontSize: 20, fontWeight: FontWeight.bold),
+          //                   ),
+          //                   Text(
+          //                     "${index + 1}".padLeft(2, "0"),
+          //                     style: GoogleFonts.poppins(
+          //                         fontSize: 12,
+          //                         color: Theme.of(context).primaryColor),
+          //                   ),
+          //                 ],
+          //               ),
+          //               title: const Text("data"),
+          //             )),
+          //   ),
+          // ),
         ],
       );
     });

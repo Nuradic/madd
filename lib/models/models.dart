@@ -17,7 +17,12 @@ class Spot {
   double lat;
   double long;
   String? url;
-  Future<String> get rate async => "${await SpotApi.getRate(this)}";
+  Future<String> get rate async =>
+      (await SpotApi.getRate(this)).toStringAsFixed(1);
+
+  Future<dynamic> get comment async => await SpotApi.getComments(this);
+  Future<dynamic> get images async => await SpotApi.getImages(this);
+  static Future<dynamic> get types async => await SpotApi.getTypes();
 
   Spot({
     required this.id,
@@ -121,6 +126,44 @@ class ImageApi {
       };
 }
 
+List<Rate> rateFromJson(String str) =>
+    List<Rate>.from(json.decode(str).map((x) => Rate.fromJson(x)));
+
+String rateToJson(List<Rate> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
+class Rate {
+  int id;
+  int rateNum;
+  int spot;
+  static double getAverage(List<Rate> rates) {
+    double avg = 0;
+
+    for (var e in rates) {
+      avg += e.rateNum;
+    }
+    return avg / rates.length;
+  }
+
+  Rate({
+    required this.id,
+    required this.rateNum,
+    required this.spot,
+  });
+
+  factory Rate.fromJson(Map<String, dynamic> json) => Rate(
+        id: json["id"],
+        rateNum: int.parse(json["rate_num"]),
+        spot: json["spot"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "rate_num": rateNum,
+        "spot": spot,
+      };
+}
+
 List<Comment> commentFromJson(String str) =>
     List<Comment>.from(json.decode(str).map((x) => Comment.fromJson(x)));
 
@@ -159,43 +202,6 @@ class Comment {
         "user_id": userId,
         "username": username,
         "profile": profile,
-        "spot": spot,
-      };
-}
-
-List<Rate> rateFromJson(String str) =>
-    List<Rate>.from(json.decode(str).map((x) => Rate.fromJson(x)));
-
-String rateToJson(List<Rate> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
-class Rate {
-  int id;
-  int rateNum;
-  int spot;
-  static double getAverage(List<Rate> rates) {
-    double avg = 0;
-    var r = rates.map((e) {
-      avg += e.rateNum;
-    });
-    return avg / rates.length;
-  }
-
-  Rate({
-    required this.id,
-    required this.rateNum,
-    required this.spot,
-  });
-
-  factory Rate.fromJson(Map<String, dynamic> json) => Rate(
-        id: json["id"],
-        rateNum: int.parse(json["rate_num"]),
-        spot: json["spot"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "rate_num": rateNum,
         "spot": spot,
       };
 }
