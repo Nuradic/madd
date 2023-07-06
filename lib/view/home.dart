@@ -11,9 +11,12 @@ import 'package:madd/controllers/home_controller.dart';
 import 'package:madd/controllers/navigation_controller.dart';
 import 'package:madd/models/models.dart';
 import 'package:madd/view/calender.dart';
-import 'package:madd/view/currency.dart';
+import 'package:madd/view/currency2.dart';
 import 'package:madd/view/detail_tour.dart';
+import 'package:madd/view/login.dart';
 import 'package:madd/view/map.dart';
+
+import 'conver.dart';
 
 class HomeMain extends StatelessWidget {
   HomeMain({super.key});
@@ -21,8 +24,8 @@ class HomeMain extends StatelessWidget {
   final pages = <Widget>[
     Home(),
     Calander(),
-    const MapHome(),
-    const CurrencyHome()
+    const CurrencyScreen(),
+    const CalendarConverterScreen()
   ];
 
   @override
@@ -42,7 +45,7 @@ class Home extends StatelessWidget {
   final c = Get.find<HomeController>();
   Widget _buildFilterItem(SpotType spotType) => GestureDetector(
         onTap: () {
-          Get.toNamed("/login");
+          // Get.toNamed("/login");
         },
         child: Container(
           width: 160,
@@ -81,39 +84,51 @@ class Home extends StatelessWidget {
         physics: const BouncingScrollPhysics(
             decelerationRate: ScrollDecelerationRate.normal),
         slivers: [
-          const SliverAppBar(),
-          SliverStickyHeader.builder(
-            builder: (context, state) => Card(
-              elevation: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 16, left: 10),
-                child: Text(
-                  "Filter ",
-                  style: GoogleFonts.poppins(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-            sliver: sliverAdapter(
-              widget: SizedBox(
-                height: 70,
-                child: FutureBuilder(
-                  future: Spot.types,
-                  builder: (context, snapshoot) => snapshoot.hasData
-                      ? ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: snapshoot.data.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) =>
-                              _buildFilterItem(snapshoot.data[index]),
-                        )
-                      : const CircularProgressIndicator(),
-                ),
-              ),
-            ),
+          SliverAppBar(
+            actions: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: OutlinedButton(
+                    onPressed: () {
+                      showSearch(
+                          context: context, delegate: CustomSearchDelegate());
+                    },
+                    child: const Icon(Icons.search)),
+              )
+            ],
           ),
+          // SliverStickyHeader.builder(
+          //   builder: (context, state) => Card(
+          //     elevation: 0,
+          //     child: Padding(
+          //       padding: const EdgeInsets.only(top: 16, left: 10),
+          //       child: Text(
+          //         "Filter ",
+          //         style: GoogleFonts.poppins(
+          //           fontSize: 18,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          //   sliver: sliverAdapter(
+          //     widget: SizedBox(
+          //       height: 70,
+          //       child: FutureBuilder(
+          //         future: Spot.types,
+          //         builder: (context, snapshoot) => snapshoot.hasData
+          //             ? ListView.builder(
+          //                 physics: const BouncingScrollPhysics(),
+          //                 itemCount: snapshoot.data.length,
+          //                 scrollDirection: Axis.horizontal,
+          //                 itemBuilder: (context, index) =>
+          //                     _buildFilterItem(snapshoot.data[index]),
+          //               )
+          //             : const CircularProgressIndicator(),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           SliverStickyHeader.builder(
             builder: (context, state) => Card(
               elevation: 0,
@@ -150,7 +165,7 @@ class Home extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16, left: 10),
                   child: Text(
-                    "Nearby Visitables",
+                    "Visitables",
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -171,10 +186,19 @@ class Home extends StatelessWidget {
                           crossAxisCount: 2),
                   itemBuilder: (context, index) => Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: SpotImager(
-                        spot: controller.topSpot[index],
-                        url:
-                            "${APIHandler.baseUrl}medias/0f8e5805de94514e25792ae4b26195db1688150039.jpg"),
+                    child: FutureBuilder(
+                      future: controller.topSpot[index].images,
+                      builder: (context, snapshoot) => snapshoot.hasData &&
+                              snapshoot.data.length != 0
+                          ? SpotImager(
+                              spot: controller.topSpot[index],
+                              url:
+                                  "${APIHandler.baseUrl}${snapshoot.data[0].url}")
+                          : SpotImager(
+                              spot: controller.topSpot[index],
+                              url:
+                                  "${APIHandler.baseUrl}medias/0f8e5805de94514e25792ae4b26195db1688150039.jpg"),
+                    ),
                   ),
                 );
               }),
@@ -185,7 +209,7 @@ class Home extends StatelessWidget {
 
   Widget getImageLay(int index) {
     return GestureDetector(
-      onTap: () => {},
+      onTap: () => {print("error")},
       child: Stack(alignment: Alignment.center, children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(10),
@@ -213,8 +237,8 @@ class Home extends StatelessWidget {
     var col = const Color(0xff6750A4);
     return GestureDetector(
       onTap: () {
-        Get.toNamed("/login");
-        print("pressed");
+        // Get.toNamed("/login");
+        // print("pressed");
       },
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -235,7 +259,7 @@ class Home extends StatelessWidget {
                     width: 200,
                     height: 150,
                     fit: BoxFit.fitWidth,
-                    image: AssetImage("assets/images/img${1 + 1}.jpeg")),
+                    image: AssetImage("assets/images/default.jpg")),
               ),
             ),
             Container(
@@ -323,7 +347,10 @@ class _TopAttractionItemState extends State<TopAttractionItem> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        // Get.to(LoginPage());
+        Get.to(DetailHome(spot: widget.spot));
+      },
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 400),
         margin: const EdgeInsets.all(10),
@@ -338,7 +365,7 @@ class _TopAttractionItemState extends State<TopAttractionItem> {
                   width: 200,
                   height: 150,
                   fit: BoxFit.fitWidth,
-                  image: AssetImage("assets/images/img${1 + 1}.jpeg")),
+                  image: AssetImage("assets/images/default.jpg")),
             ),
             Container(
               width: 200,
@@ -369,7 +396,7 @@ class _TopAttractionItemState extends State<TopAttractionItem> {
                           )),
                       Expanded(
                         flex: 4,
-                        child: Text(widget.spot.name),
+                        child: Text(widget.spot.name.split(" ")[0]),
                       ),
                     ],
                   ),
@@ -457,6 +484,71 @@ class _SpotImagerState extends State<SpotImager> {
           ),
         )
       ]),
+    );
+  }
+}
+
+class CustomSearchDelegate extends SearchDelegate {
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = "";
+        },
+        icon: const Icon(Icons.clear),
+      )
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return null;
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder(
+      future: Spot.query(query),
+      builder: (context, snapshot) => snapshot.hasData
+          ? ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) => ListTile(
+                onTap: () {
+                  Get.off(DetailHome(
+                    spot: snapshot.data[index],
+                  ));
+                },
+                leading: const CircleAvatar(),
+                title: Text(snapshot.data[index].name),
+              ),
+            )
+          : snapshot.hasError
+              ? const Center(child: Text("Something Went Wrong"))
+              : const Center(child: CircularProgressIndicator()),
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return FutureBuilder(
+      future: Spot.query(query),
+      builder: (context, snapshot) => snapshot.hasData
+          ? ListView.builder(
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) => ListTile(
+                onTap: () {
+                  Get.off(DetailHome(
+                    spot: snapshot.data[index],
+                  ));
+                },
+                leading: const CircleAvatar(),
+                title: Text(snapshot.data[index].name),
+              ),
+            )
+          : snapshot.hasError
+              ? const Center(child: Text("Something Went Wrong"))
+              : const Center(child: CircularProgressIndicator()),
     );
   }
 }

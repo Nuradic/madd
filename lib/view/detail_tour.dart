@@ -9,6 +9,7 @@ import 'package:madd/api/api_handler.dart';
 import 'package:madd/models/models.dart';
 import 'package:madd/view/currency.dart';
 import 'package:madd/view/home.dart';
+import 'package:madd/view/map.dart';
 
 class DetailHome extends StatelessWidget {
   final Spot spot;
@@ -40,7 +41,9 @@ class DetailHome extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Get.to(MapHome(spot: spot));
+            },
             icon: const FaIcon(
               FontAwesomeIcons.mapMarkerAlt,
               color: Colors.white,
@@ -72,10 +75,19 @@ class DetailHome extends StatelessWidget {
           expandedHeight: 400,
           stretch: true,
           title: Text(spot.name),
-          flexibleSpace: const FlexibleSpaceBar(
-            background: Image(
-              image: AssetImage("assets/images/img1.jpeg"),
-              fit: BoxFit.cover,
+          flexibleSpace: FlexibleSpaceBar(
+            background: FutureBuilder(
+              future: spot.images,
+              builder: (context, snapshot) {
+                if (snapshot.hasData && snapshot.data.length != 0) {
+                  return Image(
+                    fit: BoxFit.cover,
+                    image:
+                        NetworkImage(APIHandler.baseUrl + snapshot.data[0].url),
+                  );
+                }
+                return Container();
+              },
             ),
           ),
         ),

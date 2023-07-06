@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 
 class APIHandler {
-  static const baseUrl = "http://192.168.0.137:8000/";
+  static const baseUrl = "http://192.168.173.36:8000/";
   static final store = GetStorage();
   static String getCookie() {
     String? cache = store.read("Cookie");
@@ -35,12 +35,13 @@ class APIHandler {
           : null;
       cookie != null ? setCookie(cookie) : "";
       if (response.statusCode == 401) {
-        // Get.showSnackbar(const GetSnackBar(
-        //   snackPosition: SnackPosition.TOP,
-        //   dismissDirection: DismissDirection.horizontal,
-        //   title: "Needs Authentication",
-        //   message: "U need to login First",
-        // ));
+        Get.showSnackbar(const GetSnackBar(
+          duration: Duration(seconds: 2),
+          snackPosition: SnackPosition.TOP,
+          dismissDirection: DismissDirection.horizontal,
+          title: "Needs Authentication",
+          message: "U need to login First",
+        ));
         return null;
       }
       if (response.statusCode == 400) {
@@ -73,8 +74,9 @@ class APIHandler {
     try {
       var response = await client.post(Uri.parse(baseUrl + path),
           body: body, headers: getHeaders());
+      return response;
     } on Exception {
-      print("object");
+      print("Network Error");
     } finally {
       client.close();
     }

@@ -22,6 +22,8 @@ class Spot {
 
   Future<dynamic> get comment async => await SpotApi.getComments(this);
   Future<dynamic> get images async => await SpotApi.getImages(this);
+  static Future<dynamic> query(String query) async =>
+      await SpotApi.querySpot(query);
   static Future<dynamic> get types async => await SpotApi.getTypes();
 
   Spot({
@@ -91,8 +93,11 @@ class City extends SpotType {
 List<ImageApi> imageApiFromJson(String str) =>
     List<ImageApi>.from(json.decode(str).map((x) => ImageApi.fromJson(x)));
 
-String imageApiToJson(List<ImageApi> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String imageApiToJson(List<ImageApi> data) => json.encode(
+      List<dynamic>.from(
+        data.map((x) => x.toJson()),
+      ),
+    );
 
 class ImageApi {
   int id;
@@ -113,7 +118,7 @@ class ImageApi {
         id: json["id"],
         url: json["url"],
         spot: json["spot"],
-        city: json["city"],
+        city: json["city"] ?? 0,
         placeholder: json["placeholder"],
       );
 

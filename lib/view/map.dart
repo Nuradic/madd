@@ -4,21 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:madd/controllers/map_home_controller.dart';
+import 'package:madd/models/models.dart';
 
 class MapHome extends StatelessWidget {
-  const MapHome({super.key});
+  Spot spot;
+  MapHome({super.key, required this.spot});
 
   @override
   Widget build(BuildContext context) {
-    return MapSample();
+    return MapSample(spot: spot);
   }
 }
 
 class MapSample extends StatefulWidget {
-  MapSample({
-    super.key,
-  });
-  final mapController = Get.find<MapHomeController>();
+  final Spot spot;
+  MapSample({super.key, required this.spot});
+  final mapController = Get.put<MapHomeController>(MapHomeController());
 
   @override
   State<MapSample> createState() => MapSampleState();
@@ -32,25 +33,38 @@ class MapSampleState extends State<MapSample> {
     target: LatLng(37.42796133580664, -122.085749655962),
     zoom: 14.4746,
   );
+  late CameraPosition pos;
 
-  static const CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(37.43296265331129, -122.08832357078792),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  @override
+  void initState() {
+    // TODO: implement initState
+    pos = CameraPosition(
+        bearing: 192.8334901395799,
+        target: LatLng(widget.spot.lat, widget.spot.long),
+        tilt: 59.440717697143555,
+        zoom: 19.151926040649414);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: GoogleMap(
-        // markers: widget.mapController.getMarker(),
         mapType: MapType.normal,
-        initialCameraPosition: _kGooglePlex,
+        initialCameraPosition: pos,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
+        onPressed: () {},
         label: const Text('To My Location'),
         icon: const Icon(Icons.directions_boat),
       ),

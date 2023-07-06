@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:madd/api/auth.dart';
 import 'package:madd/controllers/currency_controller.dart';
 import 'package:madd/models/models.dart';
 
@@ -150,7 +151,8 @@ class CommentSheet extends StatefulWidget {
 class _CommentSheetState extends State<CommentSheet>
     with SingleTickerProviderStateMixin {
   late final AnimationController animationController;
-
+  final formkey = GlobalKey<FormState>();
+  final commController = TextEditingController();
   @override
   void initState() {
     animationController = BottomSheet.createAnimationController(this);
@@ -179,26 +181,69 @@ class _CommentSheetState extends State<CommentSheet>
         onClosing: () {},
         builder: (context) => Container(
           padding: const EdgeInsets.all(10),
-          child: FutureBuilder(
-            initialData: const [],
-            future: widget.spot.comment,
-            builder: (context, snapshoot) => snapshoot.hasData
-                ? ListView.builder(
-                    itemCount: snapshoot.data.length,
-                    itemBuilder: (context, index) => CommentItem(
-                      comment: snapshoot.data[index],
-                    ),
-                  )
-                : snapshoot.hasError
-                    ? const Center(child: Text("Something Went Wrong"))
-                    : const Center(
-                        child: CircularProgressIndicator(),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: FutureBuilder(
+              initialData: const [],
+              future: widget.spot.comment,
+              builder: (context, snapshoot) => snapshoot.hasData
+                  ? ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshoot.data.length,
+                      itemBuilder: (context, index) => CommentItem(
+                        comment: snapshoot.data[index],
                       ),
+                    )
+                  : snapshoot.hasError
+                      ? const Center(child: Text("Something Went Wrong"))
+                      : const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+            ),
           ),
         ),
       ),
-      floatingActionButton:
-          FloatingActionButton(onPressed: () {}, child: const Icon(Icons.add)),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Get.dialog(
+              AlertDialog(
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      child: const Text("Cancel")),
+                  OutlinedButton(
+                      onPressed: () async {
+                        var txt = commController.text;
+                        await User.setComment(widget.spot, txt);
+
+                        Get.back();
+                      },
+                      child: const Text("Send"))
+                ],
+                title: const Text("Add Your Comment"),
+                content: SizedBox(
+                  height: 100,
+                  // width: 100,
+                  child: Form(
+                    key: formkey,
+                    child: TextFormField(
+                      controller: commController,
+                      validator: (value) {
+                        if (value!.trim() == "") {
+                          return "Write Something";
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(border: OutlineInputBorder()),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+          child: const Icon(Icons.add)),
     );
   }
 }

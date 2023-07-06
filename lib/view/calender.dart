@@ -1,3 +1,4 @@
+import 'package:abushakir/abushakir.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -59,11 +60,15 @@ class Calander extends StatelessWidget {
               crossAxisCount: 7),
           itemCount: 35,
           itemBuilder: (context, index) => Card(
-            color: !controller.cal[index][1]
-                ? Colors.grey
-                : (index % 7) % 2 == 0
-                    ? Colors.blue.shade100
-                    : null,
+            color: controller.currentDay == controller.cal[index][0] &&
+                    controller.currentMonth == controller.month &&
+                    controller.cal[index][1]
+                ? Colors.amber
+                : !controller.cal[index][1]
+                    ? Colors.grey
+                    : (index % 7) % 2 == 0
+                        ? Colors.blue.shade100
+                        : null,
             elevation: 5,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(0),
@@ -82,7 +87,7 @@ class Calander extends StatelessWidget {
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "${index + 1}".padLeft(2, "0"),
+                    "${2}".padLeft(2, "0"),
                     style: GoogleFonts.poppins(
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
@@ -150,39 +155,45 @@ class Calander extends StatelessWidget {
           SliverStickyHeader.builder(
               builder: ((context, state) => Card(
                     elevation: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                            padding: const EdgeInsets.only(left: 20),
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_back_ios),
-                              onPressed: () {
-                                controller.getPrev();
-                              },
-                            )
-                            // Text(
-                            //   "Apr 2023",
-                            //   style: GoogleFonts.roboto(
-                            //       fontSize: 20, fontWeight: FontWeight.w500),
-                            // ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            " ${controller.month}: ${controller.year}",
+                            style: const TextStyle(
+                              fontSize: 24,
                             ),
-                        Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: IconButton(
-                              icon: const Icon(Icons.arrow_forward_ios),
-                              onPressed: () {
-                                controller.getNext();
-                              },
-                            )
-                            //  Text(
-                            //   "Mar 2023",
-                            //   style: GoogleFonts.roboto(
-                            //     fontSize: 20,
-                            //     fontWeight: FontWeight.w500,
-                            //   ),
-                            // ),
-                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: IconButton(
+                                  icon: const Icon(Icons.arrow_back_ios),
+                                  onPressed: () {
+                                    controller.getPrev();
+                                  },
+                                )
+                                // Text(
+                                //   "Apr 2023",
+                                //   style: GoogleFonts.roboto(
+                                //       fontSize: 20, fontWeight: FontWeight.w500),
+                                // ),
+                                ),
+                            Padding(
+                                padding: const EdgeInsets.only(right: 20),
+                                child: IconButton(
+                                  icon: const Icon(Icons.arrow_forward_ios),
+                                  onPressed: () {
+                                    controller.getNext();
+                                  },
+                                )),
+                          ],
+                        ),
                       ],
                     ),
                   )),

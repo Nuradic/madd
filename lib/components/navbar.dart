@@ -9,8 +9,9 @@ class NavBar extends StatelessWidget {
   final List<IconData> listoficons = [
     Icons.home,
     FontAwesomeIcons.calendarAlt,
-    FontAwesomeIcons.mapMarkerAlt,
-    FontAwesomeIcons.dollarSign
+    FontAwesomeIcons.dollarSign,
+    FontAwesomeIcons.exchangeAlt,
+    // Icons.refresh,
   ];
   final selectedColor = const Color(0xff25005c);
   // final pages = const ["/home", "/calender", "/currency", "/map"];
